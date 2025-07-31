@@ -1,0 +1,3005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift Switch College - School Management System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* ===== RESET & BASE STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8fafc;
+        }
+
+        /* ===== LOGIN PAGE STYLES ===== */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #4f46e5;
+            margin-bottom: 10px;
+        }
+
+        .login-subtitle {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .login-button {
+            width: 100%;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .login-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        .demo-accounts {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .demo-title {
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .demo-account {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .demo-account:last-child {
+            border-bottom: none;
+        }
+
+        .demo-role {
+            font-weight: 500;
+            color: #4f46e5;
+        }
+
+        .demo-credentials {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        /* ===== DASHBOARD LAYOUT ===== */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .dashboard.active {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: #1f2937;
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 30px;
+            border-bottom: 1px solid #374151;
+        }
+
+        .sidebar-logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: #4f46e5;
+        }
+
+        .sidebar-user {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #9ca3af;
+        }
+
+        .sidebar-nav {
+            padding: 20px 0;
+        }
+
+        .nav-item {
+            display: block;
+            padding: 15px 20px;
+            color: #d1d5db;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: #374151;
+            color: white;
+            border-left-color: #4f46e5;
+        }
+
+        .nav-icon {
+            margin-right: 12px;
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* ===== DASHBOARD CONTENT ===== */
+        .dashboard-content {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-card.green {
+            background: linear-gradient(135deg, #10b981, #047857);
+        }
+
+        .stat-card.orange {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+
+        .stat-card.red {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* ===== TABLE STYLES ===== */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .table-header {
+            padding: 20px 30px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .add-btn {
+            background: #4f46e5;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 15px 20px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .data-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .data-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-right: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .edit-btn {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .edit-btn:hover {
+            background: #2563eb;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #dc2626;
+        }
+
+        .view-btn {
+            background: #10b981;
+            color: white;
+        }
+
+        .view-btn:hover {
+            background: #059669;
+        }
+
+        /* ===== MODAL STYLES ===== */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 30px 30px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 5px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-cancel {
+            flex: 1;
+            background: #f3f4f6;
+            color: #374151;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-cancel:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-confirm {
+            flex: 1;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .btn-confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        /* ===== GRADE STYLES ===== */
+        .grade-a { color: #10b981; font-weight: 600; }
+        .grade-b { color: #3b82f6; font-weight: 600; }
+        .grade-c { color: #f59e0b; font-weight: 600; }
+        .grade-d { color: #ef4444; font-weight: 600; }
+        .grade-f { color: #dc2626; font-weight: 600; }
+
+        .status-active { 
+            background: #dcfce7; 
+            color: #166534; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+        }
+
+        .status-inactive { 
+            background: #fee2e2; 
+            color: #991b1b; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+        }
+
+        .status-pending { 
+            background: #fef3c7; 
+            color: #92400e; 
+            padding: 4px 12px; 
+            border-radius: 20px; 
+            font-size: 0.9rem; 
+            font-weight: 600; 
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .top-bar {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .table-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .data-table {
+                font-size: 0.9rem;
+            }
+
+            .data-table th,
+            .data-table td {
+                padding: 10px;
+            }
+        }
+
+        /* ===== LOADING STATES ===== */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #4f46e5;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* ===== HIDDEN CLASS ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        /* ===== CALENDAR STYLES ===== */
+        .calendar-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .calendar-nav {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .calendar-nav:hover {
+            background: #4338ca;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .calendar-day {
+            background: white;
+            padding: 15px 10px;
+            text-align: center;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .calendar-day.header {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #374151;
+            min-height: 40px;
+            justify-content: center;
+        }
+
+        .calendar-day.other-month {
+            color: #9ca3af;
+            background: #f8fafc;
+        }
+
+        .calendar-day.today {
+            background: #4f46e5;
+            color: white;
+            font-weight: 600;
+        }
+
+        .event-dot {
+            width: 6px;
+            height: 6px;
+            background: #ef4444;
+            border-radius: 50%;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo">Swift Switch College</div>
+                <div class="login-subtitle">School Management System</div>
+            </div>
+            
+            <form id="login-form" onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label class="form-label">User Role</label>
+                    <select id="user-role" class="form-select" required>
+                        <option value="">Select Role</option>
+                        <option value="admin">Administrator</option>
+                        <option value="teacher">Teacher</option>
+                        <option value="student">Student</option>
+                        <option value="parent">Parent</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" id="username" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="password" class="form-input" required>
+                </div>
+                
+                <button type="submit" class="login-button">Login</button>
+            </form>
+            
+            <div class="demo-accounts">
+                <div class="demo-title">Demo Accounts</div>
+                <div class="demo-account">
+                    <span class="demo-role">Admin</span>
+                    <span class="demo-credentials">admin / admin123</span>
+                </div>
+                <div class="demo-account">
+                    <span class="demo-role">Teacher</span>
+                    <span class="demo-credentials">teacher / teacher123</span>
+                </div>
+                <div class="demo-account">
+                    <span class="demo-role">Student</span>
+                    <span class="demo-credentials">student / student123</span>
+                </div>
+                <div class="demo-account">
+                    <span class="demo-role">Parent</span>
+                    <span class="demo-credentials">parent / parent123</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">Swift Switch College</div>
+                <div class="sidebar-user">Administrator Panel</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" onclick="showSection('admin-overview')">
+                    <span class="nav-icon">📊</span>Dashboard
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('admin-students')">
+                    <span class="nav-icon">👨‍🎓</span>Students
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('admin-teachers')">
+                    <span class="nav-icon">👨‍🏫</span>Teachers
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('admin-courses')">
+                    <span class="nav-icon">📚</span>Courses
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('admin-grades')">
+                    <span class="nav-icon">📝</span>Grades
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('admin-attendance')">
+                    <span class="nav-icon">📅</span>Attendance
+                </a>
+                <a href="#" class="nav-item" onclick="showSection('admin-reports')">
+                    <span class="nav-icon">📈</span>Reports
+                </a>
+            </nav>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title" id="admin-page-title">Dashboard Overview</h1>
+                <div class="user-menu">
+                    <span>Welcome, Administrator</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            
+            <!-- Admin Overview Section -->
+            <div id="admin-overview" class="dashboard-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">1,247</div>
+                        <div class="stat-label">Total Students</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-number">89</div>
+                        <div class="stat-label">Teachers</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="stat-number">45</div>
+                        <div class="stat-label">Courses</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-number">12</div>
+                        <div class="stat-label">Pending Applications</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Recent Activities</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Activity</th>
+                                <th>User</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>10:30 AM</td>
+                                <td>New student enrollment</td>
+                                <td>John Smith</td>
+                                <td><span class="status-active">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>09:15 AM</td>
+                                <td>Grade submission</td>
+                                <td>Prof. Johnson</td>
+                                <td><span class="status-active">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>08:45 AM</td>
+                                <td>Course registration</td>
+                                <td>Sarah Wilson</td>
+                                <td><span class="status-pending">Pending</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Admin Students Section -->
+            <div id="admin-students" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Student Management</h3>
+                        <button class="add-btn" onclick="openModal('student-modal')">Add Student</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Program</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body">
+                            <tr>
+                                <td>STU001</td>
+                                <td>John Smith</td>
+                                <td>john.smith@email.com</td>
+                                <td>Web Development</td>
+                                <td><span class="status-active">Active</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn delete-btn">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>STU002</td>
+                                <td>Sarah Wilson</td>
+                                <td>sarah.wilson@email.com</td>
+                                <td>Data Analytics</td>
+                                <td><span class="status-active">Active</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn delete-btn">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>STU003</td>
+                                <td>Mike Johnson</td>
+                                <td>mike.johnson@email.com</td>
+                                <td>Cybersecurity</td>
+                                <td><span class="status-inactive">Inactive</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn delete-btn">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Admin Teachers Section -->
+            <div id="admin-teachers" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Teacher Management</h3>
+                        <button class="add-btn" onclick="openModal('teacher-modal')">Add Teacher</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Department</th>
+                                <th>Courses</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>TEA001</td>
+                                <td>Prof. Anderson</td>
+                                <td>anderson@swiftswitch.edu</td>
+                                <td>Web Development</td>
+                                <td>3</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn delete-btn">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>TEA002</td>
+                                <td>Dr. Martinez</td>
+                                <td>martinez@swiftswitch.edu</td>
+                                <td>Data Analytics</td>
+                                <td>2</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn delete-btn">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Admin Courses Section -->
+            <div id="admin-courses" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Course Management</h3>
+                        <button class="add-btn" onclick="openModal('course-modal')">Add Course</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Course Name</th>
+                                <th>Instructor</th>
+                                <th>Students</th>
+                                <th>Duration</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WD101</td>
+                                <td>HTML & CSS Fundamentals</td>
+                                <td>Prof. Anderson</td>
+                                <td>45</td>
+                                <td>4 weeks</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn delete-btn">Delete</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>DA201</td>
+                                <td>Python for Data Analysis</td>
+                                <td>Dr. Martinez</td>
+                                <td>32</td>
+                                <td>6 weeks</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn delete-btn">Delete</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Admin Grades Section -->
+            <div id="admin-grades" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Grade Overview</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Course</th>
+                                <th>Assignment</th>
+                                <th>Grade</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Smith</td>
+                                <td>HTML & CSS</td>
+                                <td>Project 1</td>
+                                <td><span class="grade-a">A</span></td>
+                                <td>2024-01-15</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Sarah Wilson</td>
+                                <td>Python Analysis</td>
+                                <td>Midterm</td>
+                                <td><span class="grade-b">B+</span></td>
+                                <td>2024-01-14</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Admin Attendance Section -->
+            <div id="admin-attendance" class="dashboard-content hidden">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <button class="calendar-nav" onclick="changeMonth(-1)">← Previous</button>
+                        <h3 id="calendar-month-year">January 2024</h3>
+                        <button class="calendar-nav" onclick="changeMonth(1)">Next →</button>
+                    </div>
+                    <div class="calendar-grid" id="calendar-grid">
+                        <!-- Calendar will be generated by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Admin Reports Section -->
+            <div id="admin-reports" class="dashboard-content hidden">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">92%</div>
+                        <div class="stat-label">Average Attendance</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-number">87%</div>
+                        <div class="stat-label">Pass Rate</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="stat-number">4.2</div>
+                        <div class="stat-label">Average GPA</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-number">8%</div>
+                        <div class="stat-label">Dropout Rate</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Performance Reports</h3>
+                        <button class="add-btn">Generate Report</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Report Type</th>
+                                <th>Period</th>
+                                <th>Generated</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Student Performance</td>
+                                <td>Q1 2024</td>
+                                <td>2024-01-15</td>
+                                <td><span class="status-active">Ready</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">Download</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Attendance Summary</td>
+                                <td>December 2023</td>
+                                <td>2024-01-01</td>
+                                <td><span class="status-active">Ready</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">Download</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Dashboard -->
+    <div id="teacher-dashboard" class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">Swift Switch College</div>
+                <div class="sidebar-user">Teacher Portal</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" onclick="showTeacherSection('teacher-overview')">
+                    <span class="nav-icon">📊</span>Dashboard
+                </a>
+                <a href="#" class="nav-item" onclick="showTeacherSection('teacher-courses')">
+                    <span class="nav-icon">📚</span>My Courses
+                </a>
+                <a href="#" class="nav-item" onclick="showTeacherSection('teacher-students')">
+                    <span class="nav-icon">👨‍🎓</span>Students
+                </a>
+                <a href="#" class="nav-item" onclick="showTeacherSection('teacher-grades')">
+                    <span class="nav-icon">📝</span>Grades
+                </a>
+                <a href="#" class="nav-item" onclick="showTeacherSection('teacher-attendance')">
+                    <span class="nav-icon">📅</span>Attendance
+                </a>
+                <a href="#" class="nav-item" onclick="showTeacherSection('teacher-assignments')">
+                    <span class="nav-icon">📋</span>Assignments
+                </a>
+            </nav>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title" id="teacher-page-title">Dashboard Overview</h1>
+                <div class="user-menu">
+                    <span>Welcome, Prof. Anderson</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            
+            <!-- Teacher Overview -->
+            <div id="teacher-overview" class="dashboard-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Active Courses</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-number">127</div>
+                        <div class="stat-label">Total Students</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="stat-number">15</div>
+                        <div class="stat-label">Pending Grades</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Assignments Due</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Today's Schedule</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Course</th>
+                                <th>Room</th>
+                                <th>Students</th>
+                                <th>Topic</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>09:00 AM</td>
+                                <td>HTML & CSS Fundamentals</td>
+                                <td>Room 101</td>
+                                <td>45</td>
+                                <td>Responsive Design</td>
+                            </tr>
+                            <tr>
+                                <td>02:00 PM</td>
+                                <td>JavaScript Basics</td>
+                                <td>Room 102</td>
+                                <td>38</td>
+                                <td>DOM Manipulation</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Teacher Courses -->
+            <div id="teacher-courses" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">My Courses</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Name</th>
+                                <th>Students</th>
+                                <th>Schedule</th>
+                                <th>Progress</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WD101</td>
+                                <td>HTML & CSS Fundamentals</td>
+                                <td>45</td>
+                                <td>Mon, Wed, Fri 9:00 AM</td>
+                                <td>Week 3 of 4</td>
+                                <td>
+                                    <button class="action-btn view-btn">Manage</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WD102</td>
+                                <td>JavaScript Basics</td>
+                                <td>38</td>
+                                <td>Tue, Thu 2:00 PM</td>
+                                <td>Week 2 of 6</td>
+                                <td>
+                                    <button class="action-btn view-btn">Manage</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Teacher Students -->
+            <div id="teacher-students" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">My Students</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Name</th>
+                                <th>Course</th>
+                                <th>Attendance</th>
+                                <th>Grade</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>STU001</td>
+                                <td>John Smith</td>
+                                <td>HTML & CSS</td>
+                                <td>95%</td>
+                                <td><span class="grade-a">A</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">Profile</button>
+                                    <button class="action-btn edit-btn">Grade</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>STU002</td>
+                                <td>Sarah Wilson</td>
+                                <td>JavaScript</td>
+                                <td>88%</td>
+                                <td><span class="grade-b">B+</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">Profile</button>
+                                    <button class="action-btn edit-btn">Grade</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Teacher Grades -->
+            <div id="teacher-grades" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Grade Management</h3>
+                        <button class="add-btn" onclick="openModal('grade-modal')">Add Grade</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Course</th>
+                                <th>Assignment</th>
+                                <th>Grade</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>John Smith</td>
+                                <td>HTML & CSS</td>
+                                <td>Project 1</td>
+                                <td><span class="grade-a">A</span></td>
+                                <td>2024-01-15</td>
+                                <td>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn view-btn">Details</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Sarah Wilson</td>
+                                <td>JavaScript</td>
+                                <td>Quiz 1</td>
+                                <td><span class="grade-b">B+</span></td>
+                                <td>2024-01-14</td>
+                                <td>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                    <button class="action-btn view-btn">Details</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Teacher Attendance -->
+            <div id="teacher-attendance" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Attendance Tracking</h3>
+                        <button class="add-btn" onclick="openModal('attendance-modal')">Take Attendance</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Course</th>
+                                <th>Present</th>
+                                <th>Absent</th>
+                                <th>Late</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-01-15</td>
+                                <td>HTML & CSS</td>
+                                <td>42</td>
+                                <td>2</td>
+                                <td>1</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-14</td>
+                                <td>JavaScript</td>
+                                <td>35</td>
+                                <td>3</td>
+                                <td>0</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Teacher Assignments -->
+            <div id="teacher-assignments" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Assignment Management</h3>
+                        <button class="add-btn" onclick="openModal('assignment-modal')">Create Assignment</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Assignment</th>
+                                <th>Course</th>
+                                <th>Due Date</th>
+                                <th>Submissions</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Portfolio Project</td>
+                                <td>HTML & CSS</td>
+                                <td>2024-01-20</td>
+                                <td>35/45</td>
+                                <td><span class="status-active">Active</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Calculator App</td>
+                                <td>JavaScript</td>
+                                <td>2024-01-25</td>
+                                <td>28/38</td>
+                                <td><span class="status-active">Active</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Edit</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Student Dashboard -->
+    <div id="student-dashboard" class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">Swift Switch College</div>
+                <div class="sidebar-user">Student Portal</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" onclick="showStudentSection('student-overview')">
+                    <span class="nav-icon">📊</span>Dashboard
+                </a>
+                <a href="#" class="nav-item" onclick="showStudentSection('student-courses')">
+                    <span class="nav-icon">📚</span>My Courses
+                </a>
+                <a href="#" class="nav-item" onclick="showStudentSection('student-grades')">
+                    <span class="nav-icon">📝</span>Grades
+                </a>
+                <a href="#" class="nav-item" onclick="showStudentSection('student-assignments')">
+                    <span class="nav-icon">📋</span>Assignments
+                </a>
+                <a href="#" class="nav-item" onclick="showStudentSection('student-schedule')">
+                    <span class="nav-icon">📅</span>Schedule
+                </a>
+                <a href="#" class="nav-item" onclick="showStudentSection('student-profile')">
+                    <span class="nav-icon">👤</span>Profile
+                </a>
+            </nav>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title" id="student-page-title">Dashboard Overview</h1>
+                <div class="user-menu">
+                    <span>Welcome, John Smith</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            
+            <!-- Student Overview -->
+            <div id="student-overview" class="dashboard-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Enrolled Courses</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-number">3.8</div>
+                        <div class="stat-label">Current GPA</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="stat-number">92%</div>
+                        <div class="stat-label">Attendance Rate</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Pending Assignments</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Upcoming Deadlines</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Assignment</th>
+                                <th>Course</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Portfolio Project</td>
+                                <td>HTML & CSS</td>
+                                <td>2024-01-20</td>
+                                <td><span class="status-pending">In Progress</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">Submit</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Data Analysis Report</td>
+                                <td>Python Basics</td>
+                                <td>2024-01-22</td>
+                                <td><span class="status-pending">Not Started</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">Start</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Student Courses -->
+            <div id="student-courses" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">My Courses</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Course Code</th>
+                                <th>Course Name</th>
+                                <th>Instructor</th>
+                                <th>Progress</th>
+                                <th>Grade</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>WD101</td>
+                                <td>HTML & CSS Fundamentals</td>
+                                <td>Prof. Anderson</td>
+                                <td>75%</td>
+                                <td><span class="grade-a">A</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">Enter</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>WD102</td>
+                                <td>JavaScript Basics</td>
+                                <td>Prof. Anderson</td>
+                                <td>60%</td>
+                                <td><span class="grade-b">B+</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">Enter</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>PY101</td>
+                                <td>Python Fundamentals</td>
+                                <td>Dr. Martinez</td>
+                                <td>45%</td>
+                                <td><span class="grade-b">B</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">Enter</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Student Grades -->
+            <div id="student-grades" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">My Grades</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Assignment</th>
+                                <th>Grade</th>
+                                <th>Points</th>
+                                <th>Date</th>
+                                <th>Feedback</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>HTML & CSS</td>
+                                <td>Project 1</td>
+                                <td><span class="grade-a">A</span></td>
+                                <td>95/100</td>
+                                <td>2024-01-15</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>JavaScript</td>
+                                <td>Quiz 1</td>
+                                <td><span class="grade-b">B+</span></td>
+                                <td>87/100</td>
+                                <td>2024-01-14</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Python</td>
+                                <td>Homework 1</td>
+                                <td><span class="grade-b">B</span></td>
+                                <td>82/100</td>
+                                <td>2024-01-12</td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Student Assignments -->
+            <div id="student-assignments" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">My Assignments</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Assignment</th>
+                                <th>Course</th>
+                                <th>Due Date</th>
+                                <th>Status</th>
+                                <th>Grade</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Portfolio Project</td>
+                                <td>HTML & CSS</td>
+                                <td>2024-01-20</td>
+                                <td><span class="status-pending">In Progress</span></td>
+                                <td>-</td>
+                                <td>
+                                    <button class="action-btn edit-btn">Submit</button>
+                                    <button class="action-btn view-btn">Details</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Calculator App</td>
+                                <td>JavaScript</td>
+                                <td>2024-01-25</td>
+                                <td><span class="status-pending">Not Started</span></td>
+                                <td>-</td>
+                                <td>
+                                    <button class="action-btn edit-btn">Start</button>
+                                    <button class="action-btn view-btn">Details</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Data Visualization</td>
+                                <td>Python</td>
+                                <td>2024-01-18</td>
+                                <td><span class="status-active">Submitted</span></td>
+                                <td><span class="grade-b">B</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Student Schedule -->
+            <div id="student-schedule" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Class Schedule</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Monday</th>
+                                <th>Tuesday</th>
+                                <th>Wednesday</th>
+                                <th>Thursday</th>
+                                <th>Friday</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>09:00 AM</td>
+                                <td>HTML & CSS<br><small>Room 101</small></td>
+                                <td>Python Basics<br><small>Room 203</small></td>
+                                <td>HTML & CSS<br><small>Room 101</small></td>
+                                <td>Python Basics<br><small>Room 203</small></td>
+                                <td>HTML & CSS<br><small>Room 101</small></td>
+                            </tr>
+                            <tr>
+                                <td>02:00 PM</td>
+                                <td>JavaScript<br><small>Room 102</small></td>
+                                <td>-</td>
+                                <td>JavaScript<br><small>Room 102</small></td>
+                                <td>-</td>
+                                <td>JavaScript<br><small>Room 102</small></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Student Profile -->
+            <div id="student-profile" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Student Profile</h3>
+                        <button class="add-btn" onclick="openModal('profile-modal')">Edit Profile</button>
+                    </div>
+                    <div style="padding: 30px;">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Student ID</label>
+                                <input type="text" class="form-input" value="STU001" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-input" value="John Smith" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-input" value="john.smith@email.com" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" class="form-input" value="(555) 123-4567" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Program</label>
+                                <input type="text" class="form-input" value="Web Development" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Enrollment Date</label>
+                                <input type="text" class="form-input" value="September 1, 2023" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Address</label>
+                            <textarea class="form-textarea" readonly>123 Main Street, Anytown, ST 12345</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parent Dashboard -->
+    <div id="parent-dashboard" class="dashboard">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">Swift Switch College</div>
+                <div class="sidebar-user">Parent Portal</div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" onclick="showParentSection('parent-overview')">
+                    <span class="nav-icon">📊</span>Dashboard
+                </a>
+                <a href="#" class="nav-item" onclick="showParentSection('parent-grades')">
+                    <span class="nav-icon">📝</span>Child's Grades
+                </a>
+                <a href="#" class="nav-item" onclick="showParentSection('parent-attendance')">
+                    <span class="nav-icon">📅</span>Attendance
+                </a>
+                <a href="#" class="nav-item" onclick="showParentSection('parent-communication')">
+                    <span class="nav-icon">💬</span>Communication
+                </a>
+                <a href="#" class="nav-item" onclick="showParentSection('parent-payments')">
+                    <span class="nav-icon">💳</span>Payments
+                </a>
+            </nav>
+        </div>
+        
+        <div class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title" id="parent-page-title">Dashboard Overview</h1>
+                <div class="user-menu">
+                    <span>Welcome, Parent of John Smith</span>
+                    <button class="logout-btn" onclick="logout()">Logout</button>
+                </div>
+            </div>
+            
+            <!-- Parent Overview -->
+            <div id="parent-overview" class="dashboard-content">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">3.8</div>
+                        <div class="stat-label">Child's GPA</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="stat-number">92%</div>
+                        <div class="stat-label">Attendance Rate</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="stat-number">5</div>
+                        <div class="stat-label">Enrolled Courses</div>
+                    </div>
+                    <div class="stat-card red">
+                        <div class="stat-number">$2,500</div>
+                        <div class="stat-label">Outstanding Balance</div>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Recent Updates</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-01-15</td>
+                                <td>Grade</td>
+                                <td>Project 1 graded</td>
+                                <td>HTML & CSS</td>
+                                <td><span class="grade-a">A</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-14</td>
+                                <td>Assignment</td>
+                                <td>New assignment posted</td>
+                                <td>JavaScript</td>
+                                <td><span class="status-pending">Due 01/25</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-13</td>
+                                <td>Attendance</td>
+                                <td>Absent from class</td>
+                                <td>Python</td>
+                                <td><span class="status-inactive">Excused</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Parent Grades -->
+            <div id="parent-grades" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">John's Grades</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Course</th>
+                                <th>Assignment</th>
+                                <th>Grade</th>
+                                <th>Points</th>
+                                <th>Date</th>
+                                <th>Teacher Comments</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>HTML & CSS</td>
+                                <td>Project 1</td>
+                                <td><span class="grade-a">A</span></td>
+                                <td>95/100</td>
+                                <td>2024-01-15</td>
+                                <td>Excellent work on responsive design</td>
+                            </tr>
+                            <tr>
+                                <td>JavaScript</td>
+                                <td>Quiz 1</td>
+                                <td><span class="grade-b">B+</span></td>
+                                <td>87/100</td>
+                                <td>2024-01-14</td>
+                                <td>Good understanding of concepts</td>
+                            </tr>
+                            <tr>
+                                <td>Python</td>
+                                <td>Homework 1</td>
+                                <td><span class="grade-b">B</span></td>
+                                <td>82/100</td>
+                                <td>2024-01-12</td>
+                                <td>Needs improvement in syntax</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Parent Attendance -->
+            <div id="parent-attendance" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Attendance Record</h3>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Course</th>
+                                <th>Status</th>
+                                <th>Time</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-01-15</td>
+                                <td>HTML & CSS</td>
+                                <td><span class="status-active">Present</span></td>
+                                <td>09:00 AM</td>
+                                <td>On time</td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-14</td>
+                                <td>JavaScript</td>
+                                <td><span class="status-active">Present</span></td>
+                                <td>02:00 PM</td>
+                                <td>On time</td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-13</td>
+                                <td>Python</td>
+                                <td><span class="status-inactive">Absent</span></td>
+                                <td>-</td>
+                                <td>Excused - Medical appointment</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Parent Communication -->
+            <div id="parent-communication" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Messages & Communications</h3>
+                        <button class="add-btn" onclick="openModal('message-modal')">Send Message</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>From</th>
+                                <th>Subject</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-01-15</td>
+                                <td>Prof. Anderson</td>
+                                <td>Great progress in HTML & CSS</td>
+                                <td>Progress Update</td>
+                                <td><span class="status-active">Read</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Reply</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-12</td>
+                                <td>Administration</td>
+                                <td>Payment reminder</td>
+                                <td>Financial</td>
+                                <td><span class="status-pending">Unread</span></td>
+                                <td>
+                                    <button class="action-btn view-btn">View</button>
+                                    <button class="action-btn edit-btn">Reply</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Parent Payments -->
+            <div id="parent-payments" class="dashboard-content hidden">
+                <div class="table-container">
+                    <div class="table-header">
+                        <h3 class="table-title">Payment History & Outstanding Balance</h3>
+                        <button class="add-btn" onclick="openModal('payment-modal')">Make Payment</button>
+                    </div>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Method</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2024-01-01</td>
+                                <td>Tuition - January</td>
+                                <td>$2,500.00</td>
+                                <td><span class="status-active">Paid</span></td>
+                                <td>Credit Card</td>
+                                <td>
+                                    <button class="action-btn view-btn">Receipt</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2024-02-01</td>
+                                <td>Tuition - February</td>
+                                <td>$2,500.00</td>
+                                <td><span class="status-pending">Due</span></td>
+                                <td>-</td>
+                                <td>
+                                    <button class="action-btn edit-btn">Pay Now</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Student Modal -->
+    <div id="student-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Student</h2>
+                <button class="modal-close" onclick="closeModal('student-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="addStudent(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email *</label>
+                            <input type="email" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone *</label>
+                            <input type="tel" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Program *</label>
+                        <select class="form-select" required>
+                            <option value="">Select Program</option>
+                            <option value="web-development">Web Development</option>
+                            <option value="data-analytics">Data Analytics</option>
+                            <option value="cybersecurity">Cybersecurity</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-textarea"></textarea>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeModal('student-modal')">Cancel</button>
+                        <button type="submit" class="btn-confirm">Add Student</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Teacher Modal -->
+    <div id="teacher-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Teacher</h2>
+                <button class="modal-close" onclick="closeModal('teacher-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="addTeacher(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email *</label>
+                            <input type="email" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone *</label>
+                            <input type="tel" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Department *</label>
+                        <select class="form-select" required>
+                            <option value="">Select Department</option>
+                            <option value="web-development">Web Development</option>
+                            <option value="data-analytics">Data Analytics</option>
+                            <option value="cybersecurity">Cybersecurity</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Qualifications</label>
+                        <textarea class="form-textarea"></textarea>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeModal('teacher-modal')">Cancel</button>
+                        <button type="submit" class="btn-confirm">Add Teacher</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Course Modal -->
+    <div id="course-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add New Course</h2>
+                <button class="modal-close" onclick="closeModal('course-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="addCourse(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Course Code *</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Course Name *</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Instructor *</label>
+                            <select class="form-select" required>
+                                <option value="">Select Instructor</option>
+                                <option value="prof-anderson">Prof. Anderson</option>
+                                <option value="dr-martinez">Dr. Martinez</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Duration *</label>
+                            <input type="text" class="form-input" placeholder="e.g., 4 weeks" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-textarea"></textarea>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeModal('course-modal')">Cancel</button>
+                        <button type="submit" class="btn-confirm">Add Course</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Grade Modal -->
+    <div id="grade-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Add Grade</h2>
+                <button class="modal-close" onclick="closeModal('grade-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="addGrade(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Student *</label>
+                            <select class="form-select" required>
+                                <option value="">Select Student</option>
+                                <option value="john-smith">John Smith</option>
+                                <option value="sarah-wilson">Sarah Wilson</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Course *</label>
+                            <select class="form-select" required>
+                                <option value="">Select Course</option>
+                                <option value="html-css">HTML & CSS</option>
+                                <option value="javascript">JavaScript</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Assignment *</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Grade *</label>
+                            <select class="form-select" required>
+                                <option value="">Select Grade</option>
+                                <option value="A">A (90-100)</option>
+                                <option value="B">B (80-89)</option>
+                                <option value="C">C (70-79)</option>
+                                <option value="D">D (60-69)</option>
+                                <option value="F">F (Below 60)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Comments</label>
+                        <textarea class="form-textarea"></textarea>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeModal('grade-modal')">Cancel</button>
+                        <button type="submit" class="btn-confirm">Add Grade</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Attendance Modal -->
+    <div id="attendance-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Take Attendance</h2>
+                <button class="modal-close" onclick="closeModal('attendance-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="takeAttendance(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Course *</label>
+                            <select class="form-select" required>
+                                <option value="">Select Course</option>
+                                <option value="html-css">HTML & CSS</option>
+                                <option value="javascript">JavaScript</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date *</label>
+                            <input type="date" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Students Present</label>
+                        <div style="max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px;">
+                            <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <input type="checkbox" style="margin-right: 10px;"> John Smith
+                            </label>
+                            <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <input type="checkbox" style="margin-right: 10px;"> Sarah Wilson
+                            </label>
+                            <label style="display: flex; align-items: center; margin-bottom: 10px;">
+                                <input type="checkbox" style="margin-right: 10px;"> Mike Johnson
+                            </label>
+                        </div>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeModal('attendance-modal')">Cancel</button>
+                        <button type="submit" class="btn-confirm">Save Attendance</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assignment Modal -->
+    <div id="assignment-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Create Assignment</h2>
+                <button class="modal-close" onclick="closeModal('assignment-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="createAssignment(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Assignment Title *</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Course *</label>
+                            <select class="form-select" required>
+                                <option value="">Select Course</option>
+                                <option value="html-css">HTML & CSS</option>
+                                <option value="javascript">JavaScript</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Due Date *</label>
+                            <input type="date" class="form-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Points *</label>
+                            <input type="number" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Instructions</label>
+                        <textarea class="form-textarea"></textarea>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeModal('assignment-modal')">Cancel</button>
+                        <button type="submit" class="btn-confirm">Create Assignment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Edit Profile</h2>
+                <button class="modal-close" onclick="closeModal('profile-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="updateProfile(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name *</label>
+                            <input type="text" class="form-input" value="John" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name *</label>
+                            <input type="text" class="form-input" value="Smith" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Email *</label>
+                            <input type="email" class="form-input" value="john.smith@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Phone *</label>
+                            <input type="tel" class="form-input" value="(555) 123-4567" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <textarea class="form-textarea">123 Main Street, Anytown, ST 12345</textarea>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeModal('profile-modal')">Cancel</button>
+                        <button type="submit" class="btn-confirm">Update Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Message Modal -->
+    <div id="message-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Send Message</h2>
+                <button class="modal-close" onclick="closeModal('message-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <form onsubmit="sendMessage(event)">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">To *</label>
+                            <select class="form-select" required>
+                                <option value="">Select Recipient</option>
+                                <option value="prof-anderson">Prof. Anderson</option>
+                                <option value="administration">Administration</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Subject *</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message *</label>
+                        <textarea class="form-textarea" required></textarea>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeModal('message-modal')">Cancel</button>
+                        <button type="submit" class="btn-confirm">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div id="payment-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Make Payment</h2>
+                <button class="modal-close" onclick="closeModal('payment-modal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div style="background: #f8fafc; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+                    <h3 style="color: #1f2937; margin-bottom: 10px;">Demo Payment Form</h3>
+                    <p style="color: #6b7280;">This is a sample payment interface. No actual payment processing occurs.</p>
+                </div>
+                <form onsubmit="makePayment(event)">
+                    <div class="form-group">
+                        <label class="form-label">Amount Due</label>
+                        <input type="text" class="form-input" value="$2,500.00" readonly>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">Card Number *</label>
+                            <input type="text" class="form-input" placeholder="1234 5678 9012 3456" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Expiry Date *</label>
+                            <input type="text" class="form-input" placeholder="MM/YY" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">CVV *</label>
+                            <input type="text" class="form-input" placeholder="123" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Cardholder Name *</label>
+                            <input type="text" class="form-input" required>
+                        </div>
+                    </div>
+                    <div class="modal-buttons">
+                        <button type="button" class="btn-cancel" onclick="closeModal('payment-modal')">Cancel</button>
+                        <button type="submit" class="btn-confirm">Process Payment</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let currentRole = null;
+        let currentMonth = new Date().getMonth();
+        let currentYear = new Date().getFullYear();
+
+        // Demo user accounts
+        const demoAccounts = {
+            admin: { username: 'admin', password: 'admin123', name: 'Administrator' },
+            teacher: { username: 'teacher', password: 'teacher123', name: 'Prof. Anderson' },
+            student: { username: 'student', password: 'student123', name: 'John Smith' },
+            parent: { username: 'parent', password: 'parent123', name: 'Parent of John Smith' }
+        };
+
+        // Login functionality
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const role = document.getElementById('user-role').value;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const account = demoAccounts[role];
+            
+            if (account && username === account.username && password === account.password) {
+                currentUser = account.name;
+                currentRole = role;
+                
+                // Hide login page
+                document.getElementById('login-page').style.display = 'none';
+                
+                // Show appropriate dashboard
+                document.getElementById(`${role}-dashboard`).classList.add('active');
+                
+                // Initialize dashboard
+                if (role === 'admin') {
+                    initializeCalendar();
+                }
+                
+                // Show success message
+                setTimeout(() => {
+                    alert(`Welcome, ${account.name}! You have successfully logged in.`);
+                }, 500);
+            } else {
+                alert('Invalid credentials. Please check the demo accounts section for valid login information.');
+            }
+        }
+
+        // Logout functionality
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                // Hide all dashboards
+                document.querySelectorAll('.dashboard').forEach(dashboard => {
+                    dashboard.classList.remove('active');
+                });
+                
+                // Show login page
+                document.getElementById('login-page').style.display = 'flex';
+                
+                // Reset form
+                document.getElementById('login-form').reset();
+                
+                // Reset global variables
+                currentUser = null;
+                currentRole = null;
+            }
+        }
+
+        // Admin section navigation
+        function showSection(sectionId) {
+            // Hide all admin sections
+            document.querySelectorAll('#admin-dashboard .dashboard-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update active nav item
+            document.querySelectorAll('#admin-dashboard .nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update page title
+            const titles = {
+                'admin-overview': 'Dashboard Overview',
+                'admin-students': 'Student Management',
+                'admin-teachers': 'Teacher Management',
+                'admin-courses': 'Course Management',
+                'admin-grades': 'Grade Management',
+                'admin-attendance': 'Attendance Management',
+                'admin-reports': 'Reports & Analytics'
+            };
+            
+            document.getElementById('admin-page-title').textContent = titles[sectionId];
+        }
+
+        // Teacher section navigation
+        function showTeacherSection(sectionId) {
+            // Hide all teacher sections
+            document.querySelectorAll('#teacher-dashboard .dashboard-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update active nav item
+            document.querySelectorAll('#teacher-dashboard .nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update page title
+            const titles = {
+                'teacher-overview': 'Dashboard Overview',
+                'teacher-courses': 'My Courses',
+                'teacher-students': 'My Students',
+                'teacher-grades': 'Grade Management',
+                'teacher-attendance': 'Attendance Tracking',
+                'teacher-assignments': 'Assignment Management'
+            };
+            
+            document.getElementById('teacher-page-title').textContent = titles[sectionId];
+        }
+
+        // Student section navigation
+        function showStudentSection(sectionId) {
+            // Hide all student sections
+            document.querySelectorAll('#student-dashboard .dashboard-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update active nav item
+            document.querySelectorAll('#student-dashboard .nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update page title
+            const titles = {
+                'student-overview': 'Dashboard Overview',
+                'student-courses': 'My Courses',
+                'student-grades': 'My Grades',
+                'student-assignments': 'My Assignments',
+                'student-schedule': 'Class Schedule',
+                'student-profile': 'My Profile'
+            };
+            
+            document.getElementById('student-page-title').textContent = titles[sectionId];
+        }
+
+        // Parent section navigation
+        function showParentSection(sectionId) {
+            // Hide all parent sections
+            document.querySelectorAll('#parent-dashboard .dashboard-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update active nav item
+            document.querySelectorAll('#parent-dashboard .nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update page title
+            const titles = {
+                'parent-overview': 'Dashboard Overview',
+                'parent-grades': "Child's Grades",
+                'parent-attendance': 'Attendance Record',
+                'parent-communication': 'Messages & Communication',
+                'parent-payments': 'Payments & Billing'
+            };
+            
+            document.getElementById('parent-page-title').textContent = titles[sectionId];
+        }
+
+        // Modal functionality
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Form submission handlers
+        function addStudent(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('.btn-confirm');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Adding...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                alert('Student added successfully!');
+                closeModal('student-modal');
+                event.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+                
+                // Add new row to students table (demo)
+                addStudentToTable();
+            }, 2000);
+        }
+
+        function addTeacher(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('.btn-confirm');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Adding...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                alert('Teacher added successfully!');
+                closeModal('teacher-modal');
+                event.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }, 2000);
+        }
+
+        function addCourse(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('.btn-confirm');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Adding...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                alert('Course added successfully!');
+                closeModal('course-modal');
+                event.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }, 2000);
+        }
+
+        function addGrade(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('.btn-confirm');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Adding...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                alert('Grade added successfully!');
+                closeModal('grade-modal');
+                event.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }, 2000);
+        }
+
+        function takeAttendance(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('.btn-confirm');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Saving...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                alert('Attendance saved successfully!');
+                closeModal('attendance-modal');
+                event.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }, 2000);
+        }
+
+        function createAssignment(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('.btn-confirm');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Creating...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                alert('Assignment created successfully!');
+                closeModal('assignment-modal');
+                event.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }, 2000);
+        }
+
+        function updateProfile(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('.btn-confirm');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Updating...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                alert('Profile updated successfully!');
+                closeModal('profile-modal');
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }, 2000);
+        }
+
+        function sendMessage(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('.btn-confirm');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                alert('Message sent successfully!');
+                closeModal('message-modal');
+                event.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }, 2000);
+        }
+
+        function makePayment(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('.btn-confirm');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Processing...';
+            submitBtn.disabled = true;
+            submitBtn.classList.add('loading');
+            
+            setTimeout(() => {
+                alert('Payment processed successfully! (Demo - No actual payment was made)');
+                closeModal('payment-modal');
+                event.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('loading');
+            }, 3000);
+        }
+
+        // Calendar functionality
+        function initializeCalendar() {
+            generateCalendar(currentMonth, currentYear);
+        }
+
+        function generateCalendar(month, year) {
+            const monthNames = [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ];
+            
+            const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            
+            document.getElementById('calendar-month-year').textContent = `${monthNames[month]} ${year}`;
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            const today = new Date();
+            
+            let calendarHTML = '';
+            
+            // Add day headers
+            dayNames.forEach(day => {
+                calendarHTML += `<div class="calendar-day header">${day}</div>`;
+            });
+            
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < firstDay; i++) {
+                calendarHTML += '<div class="calendar-day other-month"></div>';
+            }
+            
+            // Add days of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const isToday = today.getDate() === day && 
+                               today.getMonth() === month && 
+                               today.getFullYear() === year;
+                
+                const todayClass = isToday ? 'today' : '';
+                const eventDot = Math.random() > 0.7 ? '<div class="event-dot"></div>' : '';
+                
+                calendarHTML += `
+                    <div class="calendar-day ${todayClass}">
+                        ${day}
+                        ${eventDot}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('calendar-grid').innerHTML = calendarHTML;
+        }
+
+        function changeMonth(direction) {
+            currentMonth += direction;
+            
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            } else if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            
+            generateCalendar(currentMonth, currentYear);
+        }
+
+        // Demo function to add student to table
+        function addStudentToTable() {
+            const tableBody = document.getElementById('students-table-body');
+            const newRow = document.createElement('tr');
+            const studentId = 'STU' + String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+            
+            newRow.innerHTML = `
+                <td>${studentId}</td>
+                <td>New Student</td>
+                <td>new.student@email.com</td>
+                <td>Web Development</td>
+                <td><span class="status-active">Active</span></td>
+                <td>
+                    <button class="action-btn view-btn">View</button>
+                    <button class="action-btn edit-btn">Edit</button>
+                    <button class="action-btn delete-btn">Delete</button>
+                </td>
+            `;
+            
+            tableBody.appendChild(newRow);
+        }
+
+        // Close modals when clicking outside
+        document.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                const modalId = event.target.id;
+                closeModal(modalId);
+            }
+        });
+
+        // Close modals with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    closeModal(modal.id);
+                });
+            }
+        });
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set today's date as default for date inputs
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                if (!input.value) {
+                    input.value = today;
+                }
+            });
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'967ceb7dc7b14e3b',t:'MTc1Mzk2MzA2NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
